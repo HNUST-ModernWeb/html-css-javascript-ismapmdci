@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息卡片</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        /* 页面整体布局 */
+        body {
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* 卡片容器：居中、阴影、圆角 */
+        .card {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 头像区域 */
+        .avatar-container {
+            position: relative;
+        }
+
+        /* 圆形头像 */
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #42b983;
+            cursor: pointer;
+        }
+
+        /* 隐藏原生文件上传按钮 */
+        #avatar-input {
+            display: none;
+        }
+
+        /* 信息展示区域 */
+        .info-display {
+            text-align: center;
+            width: 100%;
+        }
+
+        .name-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .bio-display {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+            min-height: 40px;
+        }
+
+        /* 编辑输入框 */
+        .edit-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .edit-input:focus {
+            border-color: #42b983;
+        }
+
+        /* 保存按钮样式 */
+        .save-btn {
+            padding: 12px 30px;
+            background-color: #42b983;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #359469;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">个人信息卡片</h1>
+
+    <!-- 信息卡片容器 -->
+    <div class="card">
+        <!-- 头像上传区域 -->
+        <div class="avatar-container">
+            <img src="https://picsum.photos/200/200" alt="个人头像" class="avatar" id="avatar-preview">
+            <input type="file" id="avatar-input" accept="image/*">
+        </div>
+
+        <!-- 信息展示 -->
+        <div class="info-display">
+            <div class="name-display" id="name">张三</div>
+            <div class="bio-display" id="bio">热爱编程，喜欢探索新技术</div>
+        </div>
+
+        <!-- 编辑输入框 -->
+        <input type="text" class="edit-input" id="name-input" placeholder="请输入姓名">
+        <textarea class="edit-input" id="bio-input" rows="3" placeholder="请输入个人简介"></textarea>
+
+        <!-- 保存按钮 -->
+        <button class="save-btn" id="save-btn">保存修改</button>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarInput = document.getElementById('avatar-input');
+        const nameDisplay = document.getElementById('name');
+        const bioDisplay = document.getElementById('bio');
+        const nameInput = document.getElementById('name-input');
+        const bioInput = document.getElementById('bio-input');
+        const saveBtn = document.getElementById('save-btn');
+
+        // 初始化输入框默认值
+        nameInput.value = nameDisplay.textContent;
+        bioInput.value = bioDisplay.textContent;
+
+        // 1. 点击头像触发文件上传
+        avatarPreview.addEventListener('click', () => {
+            avatarInput.click();
+        });
+
+        // 2. 头像上传实时预览
+        avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // 创建文件读取对象
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    // 更新头像预览
+                    avatarPreview.src = event.target.result;
+                };
+                // 读取图片文件
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 3. 保存修改功能
+        saveBtn.addEventListener('click', () => {
+            const newName = nameInput.value.trim();
+            const newBio = bioInput.value.trim();
+
+            // 非空校验
+            if (newName) {
+                nameDisplay.textContent = newName;
+            }
+            if (newBio) {
+                bioDisplay.textContent = newBio;
+            }
+
+            // 保存成功提示
+            alert('信息保存成功！');
+        });
+    </script>
+</body>
+</html>
